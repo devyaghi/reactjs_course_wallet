@@ -1,5 +1,6 @@
 import React from "react";
 import menu_style from '../css/menu.module.css';
+import axios_o from 'axios';
 export default class Menu extends React.Component{
 
     constructor(props) {
@@ -9,6 +10,46 @@ export default class Menu extends React.Component{
     }
 
 
+
+    componentDidMount() {
+
+        const h={
+            'Accept':'application/json',
+            'Authorization':'Bearer '+this.state.UserData.token
+
+        }
+
+        axios_o.post("/checkLogin",{},{
+            headers:h
+        }).then(response=>{
+           console.log(response);
+        }).catch(error=>{
+            console.log(error);
+            window.location="/"
+        });
+
+    }
+
+
+    logout=()=>
+    {
+
+        const h={
+            'Accept':'application/json',
+            'Authorization':'Bearer '+this.state.UserData.token
+
+        }
+        axios_o.post("/logout",{},{
+            headers:h
+        }).then(
+            response=>{
+                console.log(response);
+                window.location="/"
+            }
+        );
+
+
+    }
 
 
     render() {
@@ -30,6 +71,8 @@ export default class Menu extends React.Component{
                     <span className={menu_style.name}>
                     Welcome : {this.state.UserData.data.name}
                     </span>
+
+                    <button onClick={this.logout} className="btn btn-success">Logout</button>
                 </div>
             </nav>
         )
